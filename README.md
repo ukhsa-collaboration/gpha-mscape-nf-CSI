@@ -1,69 +1,70 @@
-# mscape-template
+# CSI: Clinical Sample Investigation
 
-This repository is a template for creating new repositories containing code that 
-will run on mSCAPE. It serves as a guide for code layout and files will need 
-amending to fit the repo purpose.
-
-There is guidance documentation including SOPs that contain further information on required repository
-structure, development cycles, and making pull requests. Please read
-this guidance documentation before using the template.
-
-Below the dashed line is a README template to be edited.
-
----------------------
-# Project or Repo Name
-
-Brief description of project here
+Pipeline for reporting investigations into clinical metagenomic samples. Currently
+the pipeline only includes a feature to analyse unclassified ONT reads.
 
 ## Installation
 
-Add installation instructions here. Ideally include commands to make
-the process as easy as possible for users.
+Currently as a workaround, a module requires the installation of a conda environment.
 
 Clone repo and create environment:
 
-`git clone git@github.com:ukhsa-collaboration/project-name.git`
+`git clone git@github.com:ukhsa-collaboration/gpha-mscape-nf-CSI.git`
 
-`conda env create -n project-name `
+`conda env create –f assets/environment.yaml`
 
-`conda activate project-name`
+`conda activate taxaplease`
 
-Installation for users: 
+## Inputs
 
-`cd project-name`
+To run the pipeline you require a samplesheet specifying the path to the input fastq (already
+downloaded from S3). An example can be found here: assets/samplesheet_example.csv
 
-`pip install .`
 
-Installation for developers (installs code in editable mode): 
+Parameters can be specified on the CLI or within nextflow.config
 
-`cd project-name`
-
-`pip install --editable '.[dev]'`
+| Parameter | Required | Description |
+| -------- | ------- | ------- |
+| --input | Yes | Path to samplesheet |
+| --outdir | No | Path to output dir  |
+| --ref_fasta | Yes | Path to references used for mapping. For unclassified samples used the tobacco genome |
+| --collapse_rank | No | Taxonomic rank used to group Kraken2 results. Defaults to family  |
+| --pluspf | Yes | Path to PlusPF version in production  |
+| --pluspf_recent | Yes | Path to most recent PlusPF database |
+| --viper | Yes | Path to viral database |
 
 ## Usage
 
-Include command line arguments (e.g. the output displayed when using -h)
-for reference. Example commands can also be helpful.
 
 ```
-project-name --input <path> --output <path>
+nextflow run main.nf --input samplesheet.csv --ref_fasta assets.tobacco_refs.fasta.gz --pluspf path/to/pluspfdb --pluspf_recent path/to/recent/pluspfdb --viper path/to/viraldb
 ```
 
-## Inputs (optional - useful if you have a CLI)
+## Outputs
 
-You may wish to use a table to list out the args:
-
-| Argument | Required | Description |
+| Output Dir | Output | Description |
 | -------- | ------- | ------- |
-| --input, -i | Yes | Input for command line use  |
-| --output, -o | Yes | Output for command line use  |
+| Mapping | id_mapping_stats.csv | Mapping information |
+| Mapping | id_mapping_stats_text.txt | Descriptive text for reporting |
+| Flye | assembly_graph.gfa | Flye output |
+| Flye | assembly_info.txt | Flye output |
+| Flye | assembly.fasta | Flye assembled contigs |
+| Flye | id_de_novo_assembly_stats_text.txt | Descriptive text for reporting |
+| Flye | id_read2contig_mapping_stats.csv | Reads mapped to contigs |
+| Flye | id_de_novo_assembly_stats.html | Contig summary plot |
+| Kraken | id.sampletype.database.kraken_out.txt | Kraken2 stdout |
+| Kraken | id_sampletype_kraken2_database_rank.csv | Summary of Kraken2 classifications. 1 per contig/read per database |
+| Sankey | id_sampletype_sankey.html | Kraken2 classification plot 1 per read/contig |
+| Sankey | id_sampletype_sankey_text.txt | Descriptive text for reporting |
 
-## Outputs (optional - useful if your tool creates lots of output files)
+## Downloading reference genome
 
-Explain the output files in detail here.
+You can download reference genomes using the NCBI datasets command line tool. Installation instructions can be found here: https://www.ncbi.nlm.nih.gov/datasets/docs/v2/command-line-tools/download-and-install/
 
-## Other sections
-
-Add other sections as appropriate for your repo. This may include
-instructions on updating the repo, instructions on adding new
-references, troubleshooting etc.
+To download the tobacco genome use the following commands:
+```
+datasets download genome taxon 4097 --reference --filename tobacco_refs.zip
+unzip -o tobacco_refs.zip
+cat  ncbi_dataset/data/*/*.fna > tobacco_refs.fasta
+gzip tobacco_refs.fasta.gz
+```

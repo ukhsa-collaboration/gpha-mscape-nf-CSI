@@ -1,0 +1,2 @@
+﻿climb_id,fastq,investigation_type,kraken_stdout
+id,path/to/id.unclassified.fastq.gz,Unclassified,path/to/id_PlusPF.kraken_assignments.tsv
