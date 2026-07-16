@@ -29,7 +29,7 @@ process KRAKEN2_RESULT_SUMMARY {
 
     output:
     tuple val(meta), path("${meta.id}_${sampletype}_kraken2_${database_name}_${params.collapse_rank}.csv"), emit: kraken2_output_summary
-    tuple val(meta), path("${meta.id}_${sampletype}_kraken2_${database_name}_summary.csv", emit: kraken2_counts
+    tuple val(meta), path("${meta.id}_${sampletype}_kraken2_${database_name}_summary.csv"), emit: kraken2_counts
 
     script:
     """

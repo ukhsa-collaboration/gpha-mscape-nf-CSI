@@ -28,14 +28,14 @@ process SANKEY{
     publishDir "${params.outdir}/${meta.id}/sankey", mode: params.publish_dir_mode
 
     input:
-    tuple val(meta), path(tobacco_mapping)
-    tuple val(meta), path(read2contigs)
-    tuple val(meta), path(kraken2_read_summary_pluspf23)
-    tuple val(meta), path(kraken2_read_summary_pluspf25)
-    tuple val(meta), path(kraken2_read_summary_viper)
-    tuple val(meta), path(kraken2_contig_summary_pluspf23)
-    tuple val(meta), path(kraken2_contig_summary_pluspf25)
-    tuple val(meta), path(kraken2_contig_summary_viper)
+    tuple val(meta), path(tobacco_mapping), path(read2contigs), path(kraken2_read_summary_pluspf23), path(kraken2_read_summary_pluspf25), path(kraken2_read_summary_viper), path(kraken2_contig_summary_pluspf23), path(kraken2_contig_summary_pluspf25), path(kraken2_contig_summary_viper)
+    //tuple val(meta), path(read2contigs)
+   // tuple val(meta), path(kraken2_read_summary_pluspf23)
+    //tuple val(meta), path(kraken2_read_summary_pluspf25)
+   // tuple val(meta), path(kraken2_read_summary_viper)
+   // tuple val(meta), path(kraken2_contig_summary_pluspf23)
+   // tuple val(meta), path(kraken2_contig_summary_pluspf25)
+    //tuple val(meta), path(kraken2_contig_summary_viper)
 
     output:
     tuple val(meta), path("${meta.id}_read_sankey.html"), path("${meta.id}_read_sankey.json"), path("${meta.id}_read_sankey_text.txt"), emit: read_sankey_output

@@ -19,8 +19,7 @@ process RUN_KRAKEN2 {
     publishDir "${params.outdir}/${meta.id}/kraken", mode: params.publish_dir_mode
 
     input:
-    tuple val(meta), path(fasta)
-    path(database)
+    tuple val(meta), path(fasta), path(database)
     val(sampletype)
     val(database_name)
 
