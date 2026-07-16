@@ -21,8 +21,7 @@ process RUN_MAPPING{
     publishDir "${params.outdir}/${meta.id}/mapping", mode: params.publish_dir_mode
 
     input:
-    tuple val(meta), path(reads)
-    path(refs)
+    tuple val(meta), path(reads), path(refs)
 
     output:
     tuple val(meta), path("${meta.id}_mapping_stats.csv"), emit : mappy_stats

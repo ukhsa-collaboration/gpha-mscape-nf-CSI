@@ -32,12 +32,12 @@ workflow CLASSIFICATION_SUMMARY {
         SUMMARISE_CONTIG_KRAKEN2_VIPER(ch_viper_contigs)
 
     emit:
-        kraken2_read_summary_pluspf23 = SUMMARISE_READ_KRAKEN2_PLUSPF_OLD.out.kraken2_output_summary  // channel: [ val(meta), path(kraken2 summary) ]
-        kraken2_read_summary_pluspf25 = SUMMARISE_READ_KRAKEN2_PLUSPF_NEW.out.kraken2_output_summary  // channel: [ val(meta), path(kraken2 summary) ]
-        kraken2_read_summary_viper = SUMMARISE_READ_KRAKEN2_VIPER.out.kraken2_output_summary  // channel: [ val(meta), path(kraken2 summary) ]
+      kraken2_read_summary_pluspf23 = SUMMARISE_READ_KRAKEN2_PLUSPF_OLD.out.kraken2_output_summary  // channel: [ val(meta), path(kraken2 summary) ]
+      kraken2_read_summary_pluspf25 = SUMMARISE_READ_KRAKEN2_PLUSPF_NEW.out.kraken2_output_summary  // channel: [ val(meta), path(kraken2 summary) ]
+      kraken2_read_summary_viper = SUMMARISE_READ_KRAKEN2_VIPER.out.kraken2_output_summary  // channel: [ val(meta), path(kraken2 summary) ]
 
-        kraken2_contig_summary_pluspf23 = SUMMARISE_CONTIG_KRAKEN2_PLUSPF_OLD.out.kraken2_output_summary  // channel: [ val(meta), path(kraken2 summary) ]
-        kraken2_contig_summary_pluspf25 = SUMMARISE_CONTIG_KRAKEN2_PLUSPF_NEW.out.kraken2_output_summary  // channel: [ val(meta), path(kraken2 summary) ]
-        kraken2_contig_summary_viper = SUMMARISE_CONTIG_KRAKEN2_VIPER.out.kraken2_output_summary  // channel: [ val(meta), path(kraken2 summary) ]
+      kraken2_contig_summary_pluspf23 = SUMMARISE_CONTIG_KRAKEN2_PLUSPF_OLD.out.kraken2_output_summary  // channel: [ val(meta), path(kraken2 summary) ]
+      kraken2_contig_summary_pluspf25 = SUMMARISE_CONTIG_KRAKEN2_PLUSPF_NEW.out.kraken2_output_summary  // channel: [ val(meta), path(kraken2 summary) ]
+      kraken2_contig_summary_viper = SUMMARISE_CONTIG_KRAKEN2_VIPER.out.kraken2_output_summary  // channel: [ val(meta), path(kraken2 summary) ]
 
 }
