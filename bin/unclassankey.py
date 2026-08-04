@@ -82,10 +82,8 @@ def process_read_class(
 
     # bit more formatting
     results_merge.loc[
-        results_merge["pluspf23_result"] == "Unclassified", "tobacco_mapping"
-    ] = "Mapped to tobacco genome"
-    results_merge.loc[
-        results_merge["pluspf23_result"] != "Unclassified", "tobacco_mapping"
+        results_merge["tobacco_mapping"] != "Mapped to tobacco genome",
+        "tobacco_mapping",
     ] = "Not mapped to tobacco genome"
 
     # only want to keep unclassified pluspf 23 results
