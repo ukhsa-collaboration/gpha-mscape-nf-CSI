@@ -9,10 +9,6 @@ workflow {
         error "Missing required parameter: --pluspf"
     }
 
-    if (!params.pluspf_recent) {
-        error "Missing required parameter: --pluspf_recent"
-    }
-
     if (!params.viper) {
         error "Missing required parameter: --viper"
     }
@@ -24,22 +20,19 @@ workflow {
 
     def ch_sample_inputs = ch_samples.multiMap { meta, row ->
         reads: [meta, file(row.fastq)]
-        scylla_output: [meta, 'pluspf2023', 'reads', file(row.kraken_stdout)]
+        scylla_output: [meta, 'pluspf', 'reads', file(row.kraken_stdout)]
     }
 
     def ch_ref_fasta = Channel.fromPath(params.ref_fasta)
 
-    def ch_pluspf23 = Channel.fromPath(params.pluspf)
-
-    def ch_pluspf25 = Channel.fromPath(params.pluspf_recent)
+    def ch_pluspf = Channel.fromPath(params.pluspf)
 
     def ch_viper = Channel.fromPath(params.viper)
 
     UNCLASSIFIED_INVESTIGATION(
         ch_sample_inputs.reads,
         ch_ref_fasta,
-        ch_pluspf23,
-        ch_pluspf25,
+        ch_pluspf,
         ch_viper,
         ch_sample_inputs.scylla_output
     )

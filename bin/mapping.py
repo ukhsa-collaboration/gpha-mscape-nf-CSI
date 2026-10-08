@@ -292,7 +292,10 @@ def main():
         )
         stats_fig.write_html(stats_fig_save_name)
     else:
-        stats_text = f"No reads mapped to {ref_file_name}"
+        stats_text = f"""Coverage of reads mapped.
+
+No reads mapped. The sample mapped with a coverage of 0% across
+the genome at 1x and 0% at 5x."""
 
     # stats_text_save_name = os.path.join(save_path, f'{stats_prefix}_mapping_stats_text.txt')
     stats_text_save_name = os.path.join(save_path, f"{sample}_mapping_stats_text.txt")

@@ -13,7 +13,7 @@ Clone repo and create environment:
 
 `conda env create –f assets/environment.yaml`
 
-`conda activate taxaplease`
+`conda activate taxaplease_2.4.2`
 
 ## Inputs
 
@@ -30,14 +30,13 @@ Parameters can be specified on the CLI or within nextflow.config
 | --ref_fasta | Yes | Path to references used for mapping. For unclassified samples used the tobacco genome |
 | --collapse_rank | No | Taxonomic rank used to group Kraken2 results. Defaults to family  |
 | --pluspf | Yes | Path to PlusPF version in production  |
-| --pluspf_recent | Yes | Path to most recent PlusPF database |
 | --viper | Yes | Path to viral database |
 
 ## Usage
 
 
 ```
-nextflow run main.nf --input samplesheet.csv --ref_fasta assets.tobacco_refs.fasta.gz --pluspf path/to/pluspfdb --pluspf_recent path/to/recent/pluspfdb --viper path/to/viraldb
+nextflow run main.nf --input samplesheet.csv --ref_fasta assets.tobacco_refs.fasta.gz --pluspf path/to/pluspfdb --viper path/to/viraldb
 ```
 
 ## Outputs
