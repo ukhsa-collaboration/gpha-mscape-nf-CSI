@@ -9,11 +9,9 @@ process SANKEY{
             - meta: Sample metadata
             - tobacco_mapping: path to mapping stats (reads to tobacco genome)
             - read2contigs: path to mapping stats (reads to contig fasta)
-            - kraken2_read_summary_pluspf23: path to kraken2 output summary (read + pluspf23)
-            - kraken2_read_summary_pluspf25: path to kraken2 output summary (read + pluspf25)
+            - kraken2_read_summary_pluspf: path to kraken2 output summary (read + pluspf)
             - kraken2_read_summary_viper: path to kraken2 output summary (read + viper)
-            - kraken2_contig_summary_pluspf23: path to kraken2 output summary (contig + pluspf23)
-            - kraken2_contig_summary_pluspf25: path to kraken2 output summary (contig + pluspf25)
+            - kraken2_contig_summary_pluspf: path to kraken2 output summary (contig + pluspf)
             - kraken2_contig_summary_viper: path to kraken2 output summary (contig + viper)
 
         Outputs:
@@ -28,13 +26,11 @@ process SANKEY{
     publishDir "${params.outdir}/${meta.id}/sankey", mode: params.publish_dir_mode
 
     input:
-    tuple val(meta), path(tobacco_mapping), path(read2contigs), path(kraken2_read_summary_pluspf23), path(kraken2_read_summary_pluspf25), path(kraken2_read_summary_viper), path(kraken2_contig_summary_pluspf23), path(kraken2_contig_summary_pluspf25), path(kraken2_contig_summary_viper)
+    tuple val(meta), path(tobacco_mapping), path(read2contigs), path(kraken2_read_summary_pluspf), path(kraken2_read_summary_viper), path(kraken2_contig_summary_pluspf), path(kraken2_contig_summary_viper)
     //tuple val(meta), path(read2contigs)
-   // tuple val(meta), path(kraken2_read_summary_pluspf23)
-    //tuple val(meta), path(kraken2_read_summary_pluspf25)
+   // tuple val(meta), path(kraken2_read_summary_pluspf)
    // tuple val(meta), path(kraken2_read_summary_viper)
-   // tuple val(meta), path(kraken2_contig_summary_pluspf23)
-   // tuple val(meta), path(kraken2_contig_summary_pluspf25)
+   // tuple val(meta), path(kraken2_contig_summary_pluspf)
     //tuple val(meta), path(kraken2_contig_summary_viper)
 
     output:
@@ -47,7 +43,7 @@ process SANKEY{
     --rank ${params.collapse_rank} \
     --tobacco_mapping ${tobacco_mapping} \
     --contigs ${read2contigs} \
-    --kraken2_read_list ${kraken2_read_summary_pluspf23} ${kraken2_read_summary_pluspf25} ${kraken2_read_summary_viper} \
-    --kraken2_contig_list ${kraken2_contig_summary_pluspf23} ${kraken2_contig_summary_pluspf25} ${kraken2_contig_summary_viper}
+    --kraken2_read_list ${kraken2_read_summary_pluspf} ${kraken2_read_summary_viper} \
+    --kraken2_contig_list ${kraken2_contig_summary_pluspf} ${kraken2_contig_summary_viper}
     """
 }
