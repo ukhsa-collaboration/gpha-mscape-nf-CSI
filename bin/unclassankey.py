@@ -52,27 +52,21 @@ def process_read_class(
     and counted (each row will be a path in the Sankey
     """
     viraldb = all_read_results_df[all_read_results_df["database"] == "viper"]
-    pluspf23 = all_read_results_df[all_read_results_df["database"] == "pluspf2023"]
-    pluspf25 = all_read_results_df[all_read_results_df["database"] == "pluspf2025"]
+    pluspf = all_read_results_df[all_read_results_df["database"] == "pluspf"]
 
     # each result needs unique field name for each x position
     viraldb_renamed = viraldb.rename({"result_grouped": "viper_result"}, axis=1)
 
-    pluspf23_renamed = pluspf23.rename({"result_grouped": "pluspf23_result"}, axis=1)
-
-    pluspf25_renamed = pluspf25.rename({"result_grouped": "pluspf25_result"}, axis=1)
+    pluspf_renamed = pluspf.rename({"result_grouped": "pluspf_result"}, axis=1)
 
     # tobacco needs a 'result'
     tobacco_check = tobacco_check.assign(tobacco_mapping="Mapped to tobacco genome")
 
     # put them all to together in single df
-    results_merge = pluspf23_renamed[["read", "pluspf23_result"]].merge(
+    results_merge = pluspf_renamed[["read", "pluspf_result"]].merge(
         viraldb_renamed[["read", "viper_result"]], on="read", how="left"
     )
 
-    results_merge = results_merge.merge(
-        pluspf25_renamed[["read", "pluspf25_result"]], on="read", how="left"
-    )
     results_merge = results_merge.merge(
         tobacco_check[["name", "tobacco_mapping"]],
         left_on="read",
@@ -86,12 +80,12 @@ def process_read_class(
         "tobacco_mapping",
     ] = "Not mapped to tobacco genome"
 
-    # only want to keep unclassified pluspf 23 results
-    results_merge = results_merge[results_merge["pluspf23_result"] == "Unclassified"]
+    # only want to keep unclassified pluspf results
+    results_merge = results_merge[results_merge["pluspf_result"] == "Unclassified"]
 
     results_merge_count = (
         results_merge.groupby(
-            ["pluspf23_result", "tobacco_mapping", "viper_result", "pluspf25_result"]
+            ["pluspf_result", "tobacco_mapping", "viper_result"]
         )
         .size()
         .reset_index(name="count")
@@ -101,7 +95,7 @@ def process_read_class(
 
 
 def process_contig_class(
-    pluspf23_read: pd.DataFrame,
+    pluspf_read: pd.DataFrame,
     contig_mapping: pd.DataFrame,
     all_contig_results_df: pd.DataFrame,
 ) -> pd.DataFrame:
@@ -110,7 +104,7 @@ def process_contig_class(
     and a column per x point. Then counts each path.
 
     Parameters:
-    pluspf23_read (pd.DataFrame): df of pluspf 2023 results per read
+    pluspf_read (pd.DataFrame): df of pluspf results per read
     contig_mapping (pd.DataFrame): df of results mapping reads -> contig
     all_contig_results_df (pd.DataFrame): per contig classification
     results for all databases used
@@ -121,29 +115,24 @@ def process_contig_class(
     """
 
     viraldb = all_contig_results_df[all_contig_results_df["database"] == "viper"]
-    pluspf23 = all_contig_results_df[all_contig_results_df["database"] == "pluspf2023"]
-    pluspf25 = all_contig_results_df[all_contig_results_df["database"] == "pluspf2025"]
+    pluspf = all_contig_results_df[all_contig_results_df["database"] == "pluspf"]
 
     viraldb_renamed = viraldb.rename(
         {"result_grouped": "viper_result", "read": "contig"}, axis=1
     )
 
-    pluspf23_read_renamed = pluspf23_read.rename(
-        {"result_grouped": "pluspf23_read_result"}, axis=1
+    pluspf_read_renamed = pluspf_read.rename(
+        {"result_grouped": "pluspf_read_result"}, axis=1
     )
 
-    pluspf23_renamed = pluspf23.rename(
-        {"result_grouped": "pluspf23_result", "read": "contig"}, axis=1
-    )
-
-    pluspf25_renamed = pluspf25.rename(
-        {"result_grouped": "pluspf25_result", "read": "contig"}, axis=1
+    pluspf_renamed = pluspf.rename(
+        {"result_grouped": "pluspf_result", "read": "contig"}, axis=1
     )
 
     contig_mapping_renamed = contig_mapping.rename({"reference": "contig"}, axis=1)
 
     # put them all to together in single df
-    results_merge = pluspf23_read_renamed[["read", "pluspf23_read_result"]].merge(
+    results_merge = pluspf_read_renamed[["read", "pluspf_read_result"]].merge(
         contig_mapping_renamed[["name", "contig"]],
         left_on="read",
         right_on="name",
@@ -159,26 +148,21 @@ def process_contig_class(
     )
 
     results_merge = results_merge.merge(
-        pluspf23_renamed[["contig", "pluspf23_result"]], on="contig", how="left"
+        pluspf_renamed[["contig", "pluspf_result"]], on="contig", how="left"
     )
 
-    results_merge = results_merge.merge(
-        pluspf25_renamed[["contig", "pluspf25_result"]], on="contig", how="left"
-    )
-
-    # only want to keep unclassified pluspf 23 results
+    # only want to keep unclassified pluspf results
     results_merge = results_merge[
-        results_merge["pluspf23_read_result"] == "Unclassified"
+        results_merge["pluspf_read_result"] == "Unclassified"
     ]  # would have to change this for the HCID one
 
     results_merge_count = (
         results_merge.groupby(
             [
-                "pluspf23_read_result",
+                "pluspf_read_result",
                 "contig",
-                "pluspf23_result",
+                "pluspf_result",
                 "viper_result",
-                "pluspf25_result",
             ],
             dropna=False,
         )
@@ -430,7 +414,7 @@ def sankey_text(input_type: str, rank: str) -> str:
     text = f"""{input_type} Kraken2 Classification Results
 
 Kraken2 can classify {input_type}s using different databases. Here, {input_type}s are classified using
-using PlusPF 2023, PlusPF 2025 and a curated viral database (viper). Taxonomic classifications
+using PlusPF and a curated viral database (viper). Taxonomic classifications
 assigned by Kraken2 have been collapsed up to {rank} to simplify the diagram. Where a {input_type} has a higher
 taxonomic classification than {rank} level, the initial taxonomic classification is used.
 {input_type.capitalize()}s classified as any bacteriophage are labelled as 'Phage'. The thickness of
@@ -595,12 +579,12 @@ def main():
     contig_colours = colours(all_contig_results)
 
     # need read results to show which went to what contigs
-    pluspf23_read_results = all_read_results[
-        all_read_results["database"] == "pluspf2023"
+    pluspf_read_results = all_read_results[
+        all_read_results["database"] == "pluspf"
     ]
 
     contig_results = process_contig_class(
-        pluspf23_read_results, contig_mapping, all_contig_results
+        pluspf_read_results, contig_mapping, all_contig_results
     )
 
     contig_sankey = make_sankey(
