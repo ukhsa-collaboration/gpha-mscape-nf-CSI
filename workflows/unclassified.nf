@@ -8,6 +8,7 @@ include { CONTIG_SUMMARY } from '../subworkflows/contig_summary'
 include { CLASSIFY_CONTIGS } from '../subworkflows/classify_contigs'
 include { CLASSIFICATION_SUMMARY } from '../subworkflows/classification_summary'
 include { PLOT_CLASSIFICATION_RESULTS } from '../subworkflows/plot_classification_results'
+include { WRITE_REPORT } from '../subworkflows/write_report'
 
 workflow UNCLASSIFIED_INVESTIGATION {
     take:
@@ -16,6 +17,7 @@ workflow UNCLASSIFIED_INVESTIGATION {
     ch_pluspf // path to PlusPF database
     ch_viper // path to curated viral database
     ch_classified_reads_pluspf // path to scylla kraken2 assignments
+    ch_template // path to template config for report
 
     main:
         ch_mapping_input = ch_reads
@@ -81,7 +83,11 @@ workflow UNCLASSIFIED_INVESTIGATION {
           .join(CLASSIFICATION_SUMMARY.out.kraken2_contig_summary_viper)
           .view()
 
-
+    
       PLOT_CLASSIFICATION_RESULTS(ch_sankey_input)
+
+      ch_config_input = ch_reads.combine(ch_template)
+
+      WRITE_REPORT(ch_config_input)
 
 }
