@@ -16,8 +16,7 @@ process KRAKEN2_RESULT_SUMMARY {
             - kraken2_counts: tuple of meta and path to kraken2 results counted
 
     */
-    executor 'local'
-    conda 'assets/environment.yml'
+    container 'ghcr.io/ukhsa-collaboration/gpha-mscape-taxaplease:2.4.1'
     cpus 2
     memory '2GB'
     tag "${meta.id}"
