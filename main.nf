@@ -29,11 +29,15 @@ workflow {
 
     def ch_viper = Channel.fromPath(params.viper)
 
+    def ch_template = Channel.value(file("${projectDir}/assets/config_template.json")
+    )
+
     UNCLASSIFIED_INVESTIGATION(
         ch_sample_inputs.reads,
         ch_ref_fasta,
         ch_pluspf,
         ch_viper,
-        ch_sample_inputs.scylla_output
+        ch_sample_inputs.scylla_output,
+        ch_template
     )
 }
