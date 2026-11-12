@@ -5,7 +5,7 @@ import pandas as pd
 import os
 from taxaplease import TaxaPlease
 
-tp = TaxaPlease()
+tp = TaxaPlease(database="/shared/team/rachael/clinical_meetings/gpha-mscape-nf-CSI_dev/taxaplease/new_taxdump_2026-03-01/taxa.db")
 
 
 def parse_kraken_assignments(path: str) -> pd.DataFrame:
